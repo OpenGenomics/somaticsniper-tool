@@ -4,7 +4,7 @@ cwlVersion: v1.0
 baseCommand: [ python, /opt/SomaticSniper.py, -F, vcf, --workdir, ./ ]
 requirements:
   - class: "DockerRequirement"
-    dockerPull: "opengenomics/somatic-sniper:1.0.5.0"
+    dockerPull: "opengenomics/somatic-sniper:latest"
 inputs:
   reference:
     type: File
