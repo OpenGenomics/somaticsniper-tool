@@ -85,25 +85,6 @@ def create_sniper_cmdline(namespace_dict, reference, tumor_bam, normal_bam, temp
         normal_bam,
         temp_output_file])
 
-def create_workspace(workdir, reference, tumor_bam, normal_bam):
-
-    new_ref = symlink_workspace_file(workdir, reference, "ref_genome.fasta")
-    if not os.path.exists(reference + ".fai"):
-        print "Indexing", new_ref
-        subprocess.check_call( ["/usr/bin/samtools", "faidx", new_ref] )
-    else:
-        symlink_workspace_file(workdir, reference + ".fai" , "ref_genome.fasta.fai"),
-    return (
-            symlink_workspace_file(workdir, tumor_bam, "tumor.bam"),
-            symlink_workspace_file(workdir, normal_bam, "normal.bam"),
-            new_ref
-            )
-
-def symlink_workspace_file(workdir, original_file, new_file):
-    symlink_name = os.path.join(os.path.abspath(workdir), new_file)
-    os.symlink(os.path.abspath(original_file), symlink_name)
-    return symlink_name
-
 def reheader_vcf(options, original_vcf_file, new_vcf_file):
     outfile = open(new_vcf_file, 'w')
     outfile.write("##fileformat=VCFv4.1\n")
@@ -213,15 +194,26 @@ def execute(options, ref, tumor, normal, temp_output_file):
         print stderr
     return p.returncode
 
+def ensure_index(reference):
+    if not os.path.exists(reference + ".fai"):
+        print "Indexing", reference
+        subprocess.check_call( ["/usr/bin/samtools", "faidx", reference] )
+
+
 if __name__ == "__main__":
     parser = sniper_argparser()
     args = parser.parse_args()
     arg_dict = vars(args)
     check_if_tcga_header_specified(arg_dict) #this will throw if we're not ok with TCGA header args
 
-    (workspace_tumor, workspace_normal, workspace_ref) = create_workspace(args.workdir, args.f, args.tumor_bam, args.normal_bam)
-    print (workspace_tumor, workspace_normal, workspace_ref)
+    reference = os.path.abspath(args.f)
+    tumor = os.path.abspath(args.tumor_bam)
+    normal = os.path.abspath(args.normal_bam)
+
+    ensure_index(reference)
+
+    print (tumor, normal, reference)
     temp_output_file = os.path.join(args.workdir, "raw_output.vcf")
 
-    execute(arg_dict, workspace_ref, workspace_tumor, workspace_normal, temp_output_file)
+    execute(arg_dict, reference, tumor, normal, temp_output_file)
     reheader_vcf(arg_dict, temp_output_file, args.output)
