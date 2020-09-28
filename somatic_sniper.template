@@ -1,25 +1,24 @@
-#####
-## If generating JSON for multiple samples, replace '</full/file/path>' or 'null' with '<>', then complete varscan_somatic.sample_list.tab. See
-## ./backup_templates/varscan_somatic.sample_list.template for examples. Be certain to provide a unique identifier under the 'run_uid' header to
-## clearly distinguish samples/runs. If *optional* sample-specific values are desired, the appropriate key from this template may be used as
-## a column header in varscan_somatic.sample_list.tab (be careful to maintain tab-delimited format).
-#####
-tumor: {
-    class: File
-    path: </full/file/path>         # Required file; replace '</full/file/path>' with full path to tumor BAM file [e.g., /my/path/to/tumor.bam]
-normal:
-    class: File
-    path: </full/file/path>         # Required file; replace '</full/file/path>' with full path to normal BAM file [e.g., /my/path/to/normal.bam]
-reference:
-    class: File
-    path: </full/file/path>         # Required file; replace '</full/file/path>' with full path to reference FASTA [e.g., /my/path/to/genome.fa.gz]
-tumor_name: null		    # Optional string; tumor sample ID for VCF header; 'null' defaults to 'TUMOR'
-normal_name: null		    # Optional string; normal sample ID for VCF header; 'null' defaults to 'NORMAL'
-output_name: null		    # Optional string; name of output VCF; 'null' defaults to 'somatic_sniper.vcf'
-dis_priors: false                   # Optional boolean; replace 'false' with 'true' to enable priors in somatic calculation (increases sensitivity for solid tumors); 'null' defaults to 'false'
-gor: false			    # Optional boolean; replace 'false' with 'true' to report Gain of Reference variants as determined by genotypes; 'null' defaults to 'false'
-loh: false			    # Optional boolean; replace 'false' with 'true' to report LOH variants as determined by genotypes; 'null' defaults to 'false'
-mapq: null			    # Optional integer: filter reads with mapping quality less than this value; 'null' defaults to '0'
-prior_p: null			    # Optional float: prior probability of a somatic mutation (implies 'use_priorp'); 'null' defaults to '0.01'
-somaticq: null			    # Optional integer: filter somatic SNV output with somatic quality less than this value; 'null' defaults to '40'
-use_priorp: false		    # Optional boolean: replace 'false' with 'true' to use prior probabilities accounting for the somatic mutation rate; 'null' defaults to 'false'
+{
+    "tumor" : {
+        "class" : "File",
+        "path" : "</full/file/path>"         # Required file; replace '</full/file/path>' with full path to tumor BAM file [e.g., /my/path/to/tumor.bam]
+    },
+    "normal" : {
+        "class" : "File",
+        "path" : "</full/file/path>"         # Required file; replace '</full/file/path>' with full path to normal BAM file [e.g., /my/path/to/normal.bam]
+    },
+    "reference" : {
+        "class" : "File",
+        "path" : "</full/file/path>"         # Required file; replace '</full/file/path>' with full path to reference FASTA [e.g., /my/path/to/genome.fa.gz]
+    },
+    "tumor_name" : null,		    # Optional string; tumor sample ID for VCF header; 'null' defaults to 'TUMOR'
+    "normal_name" : null,	    # Optional string; normal sample ID for VCF header; 'null' defaults to 'NORMAL'
+    "output_name" : null,	    # Optional string; name of output VCF; 'null' defaults to 'somatic_sniper.vcf'
+    "dis_priors" : "false",                   # Optional boolean; replace 'false' with 'true' to enable priors in somatic calculation (increases sensitivity for solid tumors); 'null' defaults to 'false'
+    "gor" : "false",		    # Optional boolean; replace 'false' with 'true' to report Gain of Reference variants as determined by genotypes; 'null' defaults to 'false'
+    "loh" : "false",		    # Optional boolean; replace 'false' with 'true' to report LOH variants as determined by genotypes; 'null' defaults to 'false'
+    "mapq" : null,			    # Optional integer: filter reads with mapping quality less than this value; 'null' defaults to '0'
+    "prior_p" : null,		    # Optional float: prior probability of a somatic mutation (implies 'use_priorp'); 'null' defaults to '0.01'
+    "somaticq" : null,			    # Optional integer: filter somatic SNV output with somatic quality less than this value; 'null' defaults to '40'
+    "use_priorp" : "false"		    # Optional boolean: replace 'false' with 'true' to use prior probabilities accounting for the somatic mutation rate; 'null' defaults to 'false'
+}
